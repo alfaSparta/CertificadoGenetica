@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Certificado Curso de Genética</title>
+
+    <!-- jsPDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            padding: 30px;
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        .formulario {
+            background: #ffffff;
+            padding: 20px;
+            max-width: 500px;
+            margin: auto;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        input {
+            width: 90%;
+            padding: 10px;
+            margin: 10px 0;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 12px 25px;
+            font-size: 16px;
+            background-color: #2c3e50;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #1a252f;
+        }
+    </style>
+</head>
+
+<body>
+
+<h1>Generador de Certificados – Genética</h1>
+
+<div class="formulario">
+    <input type="text" id="nombre" placeholder="Nombre del estudiante">
+    <input type="text" id="codigo" placeholder="Código del estudiante">
+    <button onclick="generarPDF()">Generar Certificado PDF</button>
+</div>
+
+<script>
+function fondoGenetica(doc) {
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(30);
+    doc.setTextColor(220, 220, 220);
+
+    for (let x = 20; x < 280; x += 45) {
+        for (let y = 30; y < 180; y += 35) {
+            doc.text("DNA", x, y);
+        }
+    }
+
+    doc.setTextColor(0, 0, 0);
+}
+
+function generarPDF() {
+    const { jsPDF } = window.jspdf;
+
+    const nombre = document.getElementById("nombre").value;
+    const codigo = document.getElementById("codigo").value;
+
+    if (!nombre || !codigo) {
+        alert("Por favor completa todos los campos");
+        return;
+    }
+
+    const doc = new jsPDF({
+        orientation: "landscape",
+        unit: "mm",
+        format: "a4"
+    });
+
+    // Fondo
+    fondoGenetica(doc);
+
+    // Bordes
+    doc.setLineWidth(2);
+    doc.rect(10, 10, 277, 190);
+    doc.setLineWidth(0.5);
+    doc.rect(15, 15, 267, 180);
+
+    // Título
+    doc.setFont("times", "bold");
+    doc.setFontSize(30);
+    doc.text("CERTIFICADO DE FINALIZACIÓN GENÉTICA", 148, 45, { align: "center" });
+
+    // Texto
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(16);
+    doc.text("Se certifica que el estudiante ha cumplido con los contenidos del grado 9°:", 148, 70, { align: "center" });
+
+    // Nombre
+    doc.setFont("times", "bold");
+    doc.setFontSize(24);
+    doc.text(nombre.toUpperCase(), 148, 90, { align: "center" });
+
+    // Código
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(16);
+    doc.text(`con código ${codigo}`, 148, 105, { align: "center" });
+
+    // Curso
+    doc.text("completó satisfactoriamente el curso de", 148, 125, { align: "center" });
+
+    doc.setFont("times", "bold");
+    doc.setFontSize(20);
+    doc.text("GENÉTICA – PRIMER PERIODO", 148, 140, { align: "center" });
+
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(16);
+    doc.text("desarrollado durante las 10 semanas correspondientes.", 148, 155, { align: "center" });
+
+    // Firma
+    doc.line(90, 175, 200, 175);
+    doc.setFontSize(14);
+    doc.text(
+        "Manuel Eduardo Suarez\nDocente de Ciencias Naturales",
+        148,
+        183,
+        { align: "center" }
+    );
+
+    doc.save(`Certificado_${nombre}.pdf`);
+}
+</script>
+
+</body>
+</html>
